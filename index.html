@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Print Student Forms</title>
+<title>Imprimir Fichas de Alumnos</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
@@ -207,29 +207,29 @@
 
 <!-- UPLOAD SCREEN -->
 <div id="upload-screen">
-  <h1>Print Student Forms</h1>
-  <p class="subtitle">Upload a .csv file or paste your data — one page per student.</p>
+  <h1>Imprimir Fichas de Alumnos</h1>
+  <p class="subtitle">Subí un archivo .csv o pegá tus datos — una página por alumno.</p>
 
   <div class="drop-zone" id="dropZone">
     <div class="big">📄</div>
-    <p>Drop your <strong>.csv</strong> file here, or click to browse</p>
+    <p>Arrastrá tu archivo <strong>.csv</strong> acá, o hacé clic para buscar</p>
   </div>
   <input type="file" id="fileInput" accept=".csv,.tsv,.txt" hidden>
 
-  <div class="or-divider">— or paste your data below —</div>
+  <div class="or-divider">— o pegá tus datos abajo —</div>
 
-  <textarea id="pasteArea" placeholder="Copy rows from Google Sheets and paste them here (including the header row)."></textarea>
-  <button class="go-btn" id="goBtn">Generate cards ➜</button>
+  <textarea id="pasteArea" placeholder="Copiá las filas de Google Sheets y pegalas acá (incluyendo la fila de encabezados)."></textarea>
+  <button class="go-btn" id="goBtn">Generar fichas ➜</button>
   <p class="error-msg" id="errorMsg"></p>
 </div>
 
 <!-- PRINT SCREEN -->
 <div id="print-screen">
   <div class="toolbar">
-    <span id="countLabel">0 students</span>
+    <span id="countLabel">0 alumnos</span>
     <div>
-      <button class="btn-back" onclick="goBack()">← Back</button>
-      <button class="btn-print" onclick="window.print()">🖨 Print</button>
+      <button class="btn-back" onclick="goBack()">← Volver</button>
+      <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
     </div>
   </div>
   <div class="cards-container" id="cardsContainer"></div>
@@ -261,7 +261,7 @@
   // ── Paste button ──
   goBtn.addEventListener('click', () => {
     const text = pasteArea.value.trim();
-    if (!text) return showError('Paste some data first!');
+    if (!text) return showError('¡Pegá algunos datos primero!');
     processText(text);
   });
 
@@ -324,12 +324,12 @@
   function processText(text) {
     errorMsg.style.display = 'none';
     const rows = parseCSV(text.trim());
-    if (rows.length < 2) return showError('Need at least a header row + one data row.');
+    if (rows.length < 2) return showError('Se necesita al menos una fila de encabezado + una fila de datos.');
 
     const headers = rows[0];
     const students = rows.slice(1).filter(r => r.some(c => c !== ''));
 
-    if (!students.length) return showError('No student data found.');
+    if (!students.length) return showError('No se encontraron datos de alumnos.');
 
     renderCards(headers, students);
   }
@@ -342,7 +342,7 @@
       card.className = 'student-card';
 
       // Try to find a name-like column for the title
-      let title = `Student #${idx + 1}`;
+      let title = `Alumno #${idx + 1}`;
       const nameIdx = headers.findIndex(h => /name|nombre|alumno|estudiante/i.test(h));
       if (nameIdx !== -1 && row[nameIdx]) title = row[nameIdx];
 
@@ -356,7 +356,7 @@
       cardsBox.appendChild(card);
     });
 
-    countLabel.textContent = `${students.length} student${students.length === 1 ? '' : 's'}`;
+    countLabel.textContent = `${students.length} alumno${students.length === 1 ? '' : 's'}`;
     uploadScr.style.display = 'none';
     printScr.style.display = 'block';
   }
