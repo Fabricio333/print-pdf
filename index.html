@@ -6,16 +6,16 @@
 <title>Imprimir Fichas de Alumnos</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
- 
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
   body {
     font-family: 'DM Sans', sans-serif;
     background: #f0ede8;
     color: #1a1a1a;
     min-height: 100vh;
   }
- 
+
   /* ── UPLOAD SCREEN ── */
   #upload-screen {
     display: flex;
@@ -25,20 +25,20 @@
     min-height: 100vh;
     padding: 2rem;
   }
- 
+
   h1 {
     font-size: 1.6rem;
     font-weight: 700;
     margin-bottom: .4rem;
     letter-spacing: -0.02em;
   }
- 
+
   .subtitle {
     color: #777;
     margin-bottom: 2rem;
     font-size: .95rem;
   }
- 
+
   .drop-zone {
     width: 100%;
     max-width: 520px;
@@ -50,21 +50,21 @@
     transition: all .2s;
     background: #fff;
   }
- 
+
   .drop-zone:hover, .drop-zone.dragover {
     border-color: #e85d26;
     background: #fdf6f2;
   }
- 
+
   .drop-zone p { font-size: 1.05rem; color: #555; }
   .drop-zone .big { font-size: 2.5rem; margin-bottom: .5rem; }
- 
+
   .or-divider {
     margin: 1.5rem 0;
     color: #999;
     font-size: .85rem;
   }
- 
+
   textarea {
     width: 100%;
     max-width: 520px;
@@ -77,9 +77,9 @@
     resize: vertical;
     transition: border-color .2s;
   }
- 
+
   textarea:focus { outline: none; border-color: #e85d26; }
- 
+
   .go-btn {
     margin-top: 1rem;
     padding: .75rem 2.5rem;
@@ -93,20 +93,20 @@
     font-family: inherit;
     transition: transform .1s, background .2s;
   }
- 
+
   .go-btn:hover { background: #d14e1c; }
   .go-btn:active { transform: scale(.97); }
- 
+
   .error-msg {
     color: #c0392b;
     margin-top: .8rem;
     font-size: .85rem;
     display: none;
   }
- 
+
   /* ── PRINT SCREEN ── */
   #print-screen { display: none; }
- 
+
   .toolbar {
     position: sticky;
     top: 0;
@@ -118,9 +118,9 @@
     align-items: center;
     justify-content: space-between;
   }
- 
+
   .toolbar span { font-weight: 500; }
- 
+
   .toolbar button {
     padding: .5rem 1.5rem;
     border: none;
@@ -130,16 +130,16 @@
     cursor: pointer;
     font-size: .9rem;
   }
- 
+
   .btn-print { background: #e85d26; color: #fff; margin-left: .5rem; }
   .btn-back { background: #333; color: #ccc; }
- 
+
   .cards-container {
     padding: 2rem;
     max-width: 900px;
     margin: 0 auto;
   }
- 
+
   /* ── STUDENT CARD ── */
   .student-card {
     background: #fff;
@@ -150,7 +150,7 @@
     page-break-inside: avoid;
     break-inside: avoid;
   }
- 
+
   .student-card h2 {
     font-size: 1.15rem;
     font-weight: 700;
@@ -159,34 +159,34 @@
     border-bottom: 2px solid #e85d26;
     color: #e85d26;
   }
- 
+
   .field-row {
     display: flex;
     padding: .45rem 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: .9rem;
   }
- 
+
   .field-row:last-child { border-bottom: none; }
- 
+
   .field-label {
     flex: 0 0 40%;
     font-weight: 600;
     color: #555;
   }
- 
+
   .field-value {
     flex: 1;
     color: #1a1a1a;
     word-break: break-word;
   }
- 
+
   /* ── PRINT STYLES ── */
   @media print {
     body { background: #fff; }
     .toolbar { display: none !important; }
     .cards-container { padding: 0; max-width: none; }
- 
+
     .student-card {
       border: 1px solid #ccc;
       border-radius: 0;
@@ -195,7 +195,7 @@
       page-break-after: always;
       break-after: page;
     }
- 
+
     .student-card:last-child {
       page-break-after: auto;
       break-after: auto;
@@ -204,25 +204,25 @@
 </style>
 </head>
 <body>
- 
+
 <!-- UPLOAD SCREEN -->
 <div id="upload-screen">
   <h1>Imprimir Fichas de Alumnos</h1>
-  <p class="subtitle">Subí un archivo .csv o pegá tus datos — una página por alumno.</p>
- 
+  <p class="subtitle">Subí un archivo .csv o pegá tus datos — detecta automáticamente si es por columnas o por filas.</p>
+
   <div class="drop-zone" id="dropZone">
     <div class="big">📄</div>
     <p>Arrastrá tu archivo <strong>.csv</strong> acá, o hacé clic para buscar</p>
   </div>
   <input type="file" id="fileInput" accept=".csv,.tsv,.txt" hidden>
- 
+
   <div class="or-divider">— o pegá tus datos abajo —</div>
- 
+
   <textarea id="pasteArea" placeholder="Copiá las filas de Google Sheets y pegalas acá (incluyendo la fila de encabezados)."></textarea>
   <button class="go-btn" id="goBtn">Generar fichas ➜</button>
   <p class="error-msg" id="errorMsg"></p>
 </div>
- 
+
 <!-- PRINT SCREEN -->
 <div id="print-screen">
   <div class="toolbar">
@@ -234,7 +234,7 @@
   </div>
   <div class="cards-container" id="cardsContainer"></div>
 </div>
- 
+
 <script>
   const dropZone   = document.getElementById('dropZone');
   const fileInput   = document.getElementById('fileInput');
@@ -245,7 +245,7 @@
   const printScr    = document.getElementById('print-screen');
   const cardsBox    = document.getElementById('cardsContainer');
   const countLabel  = document.getElementById('countLabel');
- 
+
   // ── Drop zone ──
   dropZone.addEventListener('click', () => fileInput.click());
   dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
@@ -257,35 +257,34 @@
     if (file) readFile(file);
   });
   fileInput.addEventListener('change', () => { if (fileInput.files[0]) readFile(fileInput.files[0]); });
- 
+
   // ── Paste button ──
   goBtn.addEventListener('click', () => {
     const text = pasteArea.value.trim();
     if (!text) return showError('¡Pegá algunos datos primero!');
     processText(text);
   });
- 
+
   function readFile(file) {
     const reader = new FileReader();
     reader.onload = e => processText(e.target.result);
     reader.readAsText(file);
   }
- 
+
   function showError(msg) {
     errorMsg.textContent = msg;
     errorMsg.style.display = 'block';
   }
- 
+
   // ── Parse CSV / TSV / pasted tabs ──
   function parseCSV(text) {
-    // Detect delimiter: if tabs are more common use tab, else comma
     const firstLine = text.split('\n')[0];
     const delim = (firstLine.split('\t').length > firstLine.split(',').length) ? '\t' : ',';
- 
+
     const rows = [];
     let current = '';
     let inQuotes = false;
- 
+
     for (let i = 0; i < text.length; i++) {
       const ch = text[i];
       if (ch === '"') {
@@ -299,7 +298,7 @@
       }
     }
     if (current.trim()) rows.push(current);
- 
+
     return rows.map(r => {
       const cols = [];
       let cell = '';
@@ -320,52 +319,134 @@
       return cols;
     });
   }
- 
+
+  // ── Detect format: columns vs rows ──
+  // Row-based format: 2 columns, with empty rows separating blocks
+  // Column-based format: 3+ columns, first row = headers
+  function detectFormat(rows) {
+    const nonEmpty = rows.filter(r => r.some(c => c !== ''));
+    if (nonEmpty.length === 0) return 'unknown';
+
+    // Count max columns across non-empty rows
+    const maxCols = Math.max(...nonEmpty.map(r => r.filter(c => c !== '').length));
+
+    // If most non-empty rows have exactly 2 filled columns, likely row-based
+    if (maxCols <= 2) {
+      const twoCols = nonEmpty.filter(r => r.filter(c => c !== '').length === 2).length;
+      if (twoCols / nonEmpty.length >= 0.7) return 'rows';
+    }
+
+    // Check if there are empty rows in the middle (row-based separator)
+    const hasEmptyGaps = rows.some((r, i) => i > 0 && i < rows.length - 1 && r.every(c => c === ''));
+    if (hasEmptyGaps && maxCols <= 2) return 'rows';
+
+    return 'columns';
+  }
+
+  // ── Parse row-based format ──
+  // Blocks of [label, value] rows separated by empty rows
+  function parseRowBased(rows) {
+    const students = [];
+    let current = [];
+
+    for (const row of rows) {
+      const isEmpty = row.every(c => c === '');
+      if (isEmpty) {
+        if (current.length > 0) {
+          students.push(current);
+          current = [];
+        }
+      } else {
+        current.push({ label: row[0] || '', value: row[1] || '' });
+      }
+    }
+    if (current.length > 0) students.push(current);
+
+    return students; // Array of arrays of {label, value}
+  }
+
   function processText(text) {
     errorMsg.style.display = 'none';
     const rows = parseCSV(text.trim());
-    if (rows.length < 2) return showError('Se necesita al menos una fila de encabezado + una fila de datos.');
- 
-    const headers = rows[0];
-    const students = rows.slice(1).filter(r => r.some(c => c !== ''));
- 
-    if (!students.length) return showError('No se encontraron datos de alumnos.');
- 
-    renderCards(headers, students);
+    if (rows.length < 2) return showError('Se necesita al menos 2 filas de datos.');
+
+    const format = detectFormat(rows);
+
+    if (format === 'rows') {
+      const students = parseRowBased(rows);
+      if (!students.length) return showError('No se encontraron datos de alumnos.');
+      renderCardsRowBased(students);
+    } else {
+      // Column-based
+      const headers = rows[0];
+      const students = rows.slice(1).filter(r => r.some(c => c !== ''));
+      if (!students.length) return showError('No se encontraron datos de alumnos.');
+      renderCardsColumnBased(headers, students);
+    }
   }
- 
-  function renderCards(headers, students) {
+
+  // ── Render: column-based ──
+  function renderCardsColumnBased(headers, students) {
     cardsBox.innerHTML = '';
- 
+
     students.forEach((row, idx) => {
       const card = document.createElement('div');
       card.className = 'student-card';
- 
-      // Try to find a name-like column for the title
+
       let title = `Alumno #${idx + 1}`;
       const nameIdx = headers.findIndex(h => /name|nombre|alumno|estudiante/i.test(h));
       if (nameIdx !== -1 && row[nameIdx]) title = row[nameIdx];
- 
+
       card.innerHTML = `<h2>${esc(title)}</h2>` +
         headers.map((h, i) => `
           <div class="field-row">
             <div class="field-label">${esc(h)}</div>
             <div class="field-value">${esc(row[i] || '—')}</div>
           </div>`).join('');
- 
+
       cardsBox.appendChild(card);
     });
- 
-    countLabel.textContent = `${students.length} alumno${students.length === 1 ? '' : 's'}`;
+
+    showPrintScreen(students.length);
+  }
+
+  // ── Render: row-based ──
+  function renderCardsRowBased(students) {
+    cardsBox.innerHTML = '';
+
+    students.forEach((fields, idx) => {
+      const card = document.createElement('div');
+      card.className = 'student-card';
+
+      // Try to find a name-like field for the title
+      let title = `Alumno #${idx + 1}`;
+      const nameField = fields.find(f => /name|nombre|alumno|estudiante/i.test(f.label));
+      if (nameField && nameField.value) title = nameField.value;
+
+      card.innerHTML = `<h2>${esc(title)}</h2>` +
+        fields.map(f => `
+          <div class="field-row">
+            <div class="field-label">${esc(f.label)}</div>
+            <div class="field-value">${esc(f.value || '—')}</div>
+          </div>`).join('');
+
+      cardsBox.appendChild(card);
+    });
+
+    showPrintScreen(students.length);
+  }
+
+  function showPrintScreen(count) {
+    countLabel.textContent = `${count} alumno${count === 1 ? '' : 's'}`;
     uploadScr.style.display = 'none';
     printScr.style.display = 'block';
   }
- 
+
   function goBack() {
     printScr.style.display = 'none';
     uploadScr.style.display = 'flex';
   }
- 
+
   function esc(s) {
     const d = document.createElement('div');
     d.textContent = s;
